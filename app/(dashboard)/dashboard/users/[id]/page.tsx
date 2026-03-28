@@ -2,17 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { users } from "@/components/site-data";
 
-type UserPageProps = {
-  params: Promise<{ id: string }>;
-};
+export function generateStaticParams() {
+  return users.map((user) => ({ id: user.id }));
+}
 
-export default async function UserDetailsPage({ params }: UserPageProps) {
-  const { id } = await params;
-  const user = users.find((entry) => entry.id === id);
+export default function UserPage({ params }: { params: { id: string } }) {
+  const user = users.find((u) => u.id === params.id);
 
-  if (!user) {
-    notFound();
-  }
+  if (!user) return notFound();
 
   return (
     <section className="space-y-8">
